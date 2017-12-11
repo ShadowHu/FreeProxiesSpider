@@ -27,7 +27,7 @@ class GetProxies:
     def __init__(self, url):
         self.url = url
 
-    def kuaidailiIPs(self):  # 爬取kuaidaili IP方式
+    def kuaidailiIPs(self):  # To crawl IP from kuaidaili
         for i in range(1, 11):
             req = requests.get(self.url + '/' + str(i))
             tree = etree.HTML(req.text)
@@ -40,7 +40,7 @@ class GetProxies:
                 proxies[ty] = ip + ':' + pt
                 yield proxies
 
-    def xiciIPs(self):  # 爬取xici IP方式
+    def xiciIPs(self):  # To crawl IP from xici
         req = requests.get(self.url, headers=headers)
         tree = etree.HTML(req.text)
         treelist = tree.xpath("//table//tr")
@@ -60,7 +60,7 @@ class GetProxies:
 def test(liter):
     for d in liter:
         starttime = time.time()
-        for i in range(5):  # 五次访问测试
+        for i in range(5):  # Test 5
             try:
                 # s = requests.session()
                 # s.keep_alive = False
@@ -82,13 +82,13 @@ def test(liter):
             print("Fail", d, code)
 
 
-def renameLastFile(file):  # 将之前的AvailIP.txt加上时间
+def renameLastFile(file):  # Rename last 'AvailIP.txt' with create time
     creattime = time.ctime(os.path.getctime(file))[4:-14].replace(' ', '')
     os.rename(file, file[:-4] + creattime + '.txt')
 
 
 if __name__ == '__main__':
-    try:
+    try:  # Every time rename current 'AvailIP.txt' to get newest 'AvailIP.txt'
         renameLastFile("AvailIP.txt")
     except Exception as e:
         print(e)
